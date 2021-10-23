@@ -39,7 +39,7 @@ function ShowTask(props) {
 
         }
 
-    }, [props.searchData,props.addData])
+    }, [props.searchData,props.addData,props.removeAll])
 
     function closeTask(index) {
 
@@ -47,7 +47,7 @@ function ShowTask(props) {
 
     }
 
-    // This is done task function
+    // This is done task (chekLine) function
     
     function doneTask(index) {
 
@@ -56,18 +56,30 @@ function ShowTask(props) {
         setTaskDone(taskDone)
         setCheckLine({ ...checkLine, [index]: !checkLine[index] })
 
-        console.log('[index]',[index])
-        console.log('!chekline[index]',!checkLine[index])
+        // console.log('[index]',[index])
+        // console.log('!chekline[index]',!checkLine[index])
     }
-    console.log('chekline',checkLine,)
 
-    // This function is for edit task
+    // console.log('chekline',checkLine,)
+
+    // ---------------- Function get called when we click on Edit Btn ----------------------------
+
     const [edit,setEdit] = useState(false)
-    function editTask(index) {
+    function editTask(id) {
 
-        props.editCard(index)
-        setEdit(true)
+        let editItem = state.find((ele)=>{
+            return ele.id === id
+        })
+
+        props.setStoreTask(editItem) //this is for storing the task, Id from show task to update input
+
+        props.settoggleIcon(false) // toggle add btn to update btn
+
+        
     }
+
+
+   
 
    
     return (
@@ -80,13 +92,14 @@ function ShowTask(props) {
                     state.map((ele, index) => (
 
 
-                        <div class="card mb-4  mx-3" style={{ 'max-width': ' 18rem' }}>
+                        <div key={ele.id} class="card mb-4  mx-3" style={{ 'max-width': ' 18rem' }}>
                             <div class="card-header d-flex justify-content-between">
                                 <strong> Task {index + 1}</strong>
+                                {/* <strong> Task {ele.id}</strong> */}
                                 <div>
-                                    <abbr title="Edit"> <span onClick={()=>editTask(index)} style={{ 'cursor': 'pointer', 'color': '#3f00ff ' }} className=""> <ModeEditIcon />  </span></abbr>
-                                    <abbr title="Done"> <span onClick={() => doneTask(index)} style={{ 'cursor': 'pointer', 'color': '#32CD32	 ' }} className="ms-2"> <CheckCircleOutlineIcon />  </span></abbr>
-                                    <abbr title="Close"> <span onClick={() => closeTask(index)} style={{ 'cursor': 'pointer', 'color': '#ff0000' }} className="ms-2"> <HighlightOffIcon /> </span></abbr>
+                                    <span title="Edit" onClick={()=>editTask(ele.id)} style={{ 'cursor': 'pointer', 'color': '#3f00ff ' }} className=""> <ModeEditIcon />  </span>
+                                    <span title="Done" onClick={() => doneTask(index)} style={{ 'cursor': 'pointer', 'color': '#32CD32	 ' }} className="ms-2"> <CheckCircleOutlineIcon />  </span>
+                                    <span title="Close" onClick={() => closeTask(index)} style={{ 'cursor': 'pointer', 'color': '#ff0000' }} className="ms-2"> <HighlightOffIcon /> </span>
                                 </div>
                             </div>
                             <div class="card-body" >
@@ -98,29 +111,7 @@ function ShowTask(props) {
 
                             </div>
                         </div>
-
-                    //     <div class="alert alert-primary d-flex " role="alert">
-                    //         <strong> Task {index + 1 } </strong>
-                    //             <p class="card-text text-primary ms-5">{ele.date}</p>
-                    //         <span class="ms-5">
-
-                    //         {
-                    //   checkLine[index] ? <h5 class=""> ✔ <span style={{ 'text-decoration': taskDone }}> {ele.task} </span>  </h5> : <h5  class="">{ele.task}</h5>
-                    //         }
-                            
-                    //         </span>
-                    //         <div class="ms-5">
-
-                    //         <span  title="Edit" onClick={()=>editTask(index)} style={{ 'cursor': 'pointer', 'color': '#3f00ff ' }} className=""> <ModeEditIcon />  </span>
-                    //          <span title="Done" onClick={() => doneTask(index)} style={{ 'cursor': 'pointer', 'color': '#32CD32	 ' }} className="ms-2"> <CheckCircleOutlineIcon />  </span>
-                    //         <span title="Close" onClick={() => closeTask(index)} style={{ 'cursor': 'pointer', 'color': '#ff0000' }} className="ms-2"> <HighlightOffIcon /> </span>
-                    //         </div>
-                              
-                            
-                             
-                    //   </div>
-
-                        
+ 
 
                     ))
 
